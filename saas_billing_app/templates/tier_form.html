@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block title %}Plan{% endblock %}
+{% block content %}
+<h1>{{ 'Add plan' if mode == 'new' else 'Edit plan #%d' % tier_id }}</h1>
+<div class="card"><form method="post" novalidate><div class="form-grid">
+  <div><label>Plan name *</label><input type="text" name="name" maxlength="50" value="{{ form.get('name','') }}" required></div>
+  <div><label>Monthly rate (Rs.) *</label><input type="number" name="rate" step="0.01" min="0.01" value="{{ form.get('rate','') }}" required></div>
+  <div><label>Maximum users *</label><input type="number" name="users" min="1" value="{{ form.get('users','') }}" required></div>
+  <div><label>Storage (GB) *</label><input type="number" name="storage" min="1" value="{{ form.get('storage','') }}" required></div>
+</div>
+<p><button class="btn" type="submit">Save plan</button> <a class="btn grey" href="{{ url_for('tiers') }}">Cancel</a></p></form></div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}Usage{% endblock %}
+{% block content %}
+<h1>Usage records</h1>
+<form class="toolbar" method="get">
+  <div class="grow"><label>Subscription</label><select name="sub"><option value="">All</option>{% for s in subs %}<option value="{{ s.Subscription_ID }}" {{ 'selected' if sub == s.Subscription_ID }}>#{{ s.Subscription_ID }} - {{ s.Company_Name }}</option>{% endfor %}</select></div>
+  <div><button class="btn" type="submit">Filter</button> <a class="btn grey" href="{{ url_for('usage') }}">Clear</a></div>
+  <div><a class="btn" href="{{ url_for('usage_new') }}">+ Add reading</a></div>
+</form>
+<table><tr><th>ID</th><th>Client</th><th>Plan</th><th>Date</th><th class="num">Users</th><th class="num">Storage used (GB)</th><th>Limit check</th></tr>
+{% for r in rows %}<tr><td>{{ r.Usage_ID }}</td><td>{{ r.Company_Name }} (#{{ r.Subscription_ID }})</td><td>{{ r.Tier_Name }}</td><td>{{ r.Usage_Date }}</td>
+<td class="num">{{ r.Active_Users }} / {{ r.Max_Users }}</td><td class="num">{{ '%.2f' % r.Storage_Used_GB }} / {{ r.Storage_GB }}</td><td><span class="badge {{ r.Flag|badge }}">{{ r.Flag }}</span></td></tr>
+{% else %}<tr><td colspan="7">No usage records.</td></tr>{% endfor %}</table>
+{% endblock %}

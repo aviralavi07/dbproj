@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% block title %}Testing{% endblock %}
+{% block content %}
+<h1>Testing</h1>
+<p class="lead">The application was checked with automated test cases. Each test sends real requests to the application, which runs real SQL, and then checks both the page that comes back and the data that was stored.</p>
+<ul class="plain">
+  <li>Every test starts from a fresh copy of the sample data, so tests do not affect each other or your MySQL data.</li>
+  <li>The last recorded run of the {{ tests|length }} application test cases: {{ tests|length }} passed, 0 failed.</li>
+  <li>To run them again, type <code>python run_tests.py</code> in the project folder.</li>
+</ul>
+
+<h2>Application test cases</h2>
+<table>
+  <tr><th style="width:80px">ID</th><th>What is checked</th></tr>
+  {% for tid, text in tests %}<tr><td>{{ tid }}</td><td>{{ text }}</td></tr>{% endfor %}
+</table>
+
+{% if site_tests %}
+<h2>Website checks</h2>
+<p>These checks cover the website itself: that every page and link opens, that the policy pages and the favicon exist, and that the pages follow the design rules of the project.</p>
+<table>
+  <tr><th style="width:80px">ID</th><th>What is checked</th></tr>
+  {% for tid, text in site_tests %}<tr><td>{{ tid }}</td><td>{{ text }}</td></tr>{% endfor %}
+</table>
+{% endif %}
+{% endblock %}

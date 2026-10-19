@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}Cancel subscription{% endblock %}
+{% block content %}
+<h1>Cancel subscription #{{ sub.Subscription_ID }}</h1>
+<div class="card"><p><b>{{ sub.Company_Name }}</b> - {{ sub.Tier_Name }} plan, started {{ sub.Start_Date }}.</p>
+<form method="post" novalidate><div class="form-grid">
+  <div><label>Request date *</label><input type="date" name="request" value="{{ form.get('request','') }}" required></div>
+  <div><label>Effective date *</label><input type="date" name="effective" value="{{ form.get('effective','') }}" required></div>
+  <div class="full"><label>Reason</label><input type="text" name="reason" maxlength="150" value="{{ form.get('reason','') }}"></div>
+</div>
+<p class="muted">A cancellation record is saved and the subscription status is set to Cancelled in one transaction.</p>
+<p><button class="btn red" type="submit">Confirm cancellation</button> <a class="btn grey" href="{{ url_for('subscriptions') }}">Back</a></p></form></div>
+{% endblock %}

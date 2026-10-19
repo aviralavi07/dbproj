@@ -1,0 +1,37 @@
+{% extends "base.html" %}{% block title %}Terms and Conditions{% endblock %}
+{% block content %}
+<div class="doc">
+<h1>Terms and Conditions</h1>
+<p class="muted">Last updated: October 2026</p>
+
+<h2>1. Purpose</h2>
+<p>This website and application is a course project for Database Systems. It shows how a database and a web application can manage subscriptions and billing for a software company. By using it you agree to these terms.</p>
+
+<h2>2. Educational use only</h2>
+<p>The project is meant for learning, demonstration and assessment. It is not a commercial product and it is not designed to run a real business.</p>
+
+<h2>3. Sample data</h2>
+<p>The companies, people, e-mail addresses, invoices and payments that come with the project are fictional. Please do not enter real personal, financial or payment information.</p>
+
+<h2>4. No payments are processed</h2>
+<p>A payment or refund in the application is only a record in the database. The application does not connect to a bank, a card network or any payment service, and no money is moved.</p>
+
+<h2>5. Calculations</h2>
+<p>Invoice totals are the sum of the invoice lines. The application does not calculate taxes such as GST and it is not an accounting or tax tool. Do not rely on its figures for any real financial decision.</p>
+
+<h2>6. No warranty</h2>
+<p>The project is provided as it is, without any promise that it is complete, correct or available at all times. It was tested with automated test cases, but it may still contain mistakes.</p>
+
+<h2>7. Limit of responsibility</h2>
+<p>The team members are not responsible for any loss that comes from using the project, including loss of data. Please keep a backup of any database you care about, for example with mysqldump.</p>
+
+<h2>8. Ownership and software used</h2>
+<p>The design, code and documents of this project were written by the team members for the course. Flask, MySQL, mysql-connector-python and Python are third-party software and keep their own licences.</p>
+
+<h2>9. Changes</h2>
+<p>These terms may be updated. The date at the top of the page shows when they were last changed.</p>
+
+<h2>10. Related page</h2>
+<p>How data is handled is described in the <a href="{{ url_for('privacy') }}">Privacy Policy</a>.</p>
+</div>
+{% endblock %}

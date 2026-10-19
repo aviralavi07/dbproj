@@ -1,0 +1,46 @@
+{% extends "base.html" %}{% block title %}Overview{% endblock %}
+{% block content %}
+<div class="hero">
+  <h1>Cloud SaaS Subscription and Billing Management System</h1>
+  <p class="lead">A database project for a software company that sells monthly plans. It records clients, their subscriptions, the invoices raised for them, the payments and refunds received, cancellations, support tickets and usage. This website explains the design of the database and contains the working application that uses it.</p>
+  <div class="buttons">
+    <a class="btn" href="{{ url_for('dashboard') }}">Open the application</a>
+    <a class="btn grey" href="{{ url_for('design') }}">Read the database design</a>
+  </div>
+</div>
+
+<h2>The problem</h2>
+<p>A SaaS company bills every client every month, and the amount depends on the plan, the extra users or storage used, and the payments already received. When this information is kept in separate spreadsheets and emails, invoices are calculated by hand and mistakes are common. Unpaid invoices are hard to find, refunds and cancellations are not recorded properly, and nobody can see how much revenue each plan earns.</p>
+
+<h2>What the application does</h2>
+<table>
+  <tr><th style="width:170px">Module</th><th>What you can do</th></tr>
+  {% for name, endpoint, text in modules %}<tr><td><a href="{{ url_for(endpoint) }}">{{ name }}</a></td><td>{{ text }}</td></tr>{% endfor %}
+</table>
+
+<h2 id="how">How the pieces fit</h2>
+<figure>
+  <img src="{{ url_for('static', filename='architecture.png') }}" alt="Diagram: the browser sends requests to the Flask application, which runs SQL on the MySQL database and returns the result rows to the application, which returns pages to the browser.">
+  <figcaption>The browser talks to the Flask application, and the application talks to MySQL.</figcaption>
+</figure>
+<ul class="plain">
+  <li>The pages you see are HTML templates filled in by the Flask application.</li>
+  <li>The application connects to the MySQL database <b>saas_billing_db</b> with mysql-connector-python. Every SQL statement uses parameters, so text typed into a form is never run as SQL.</li>
+  <li>Actions that change more than one table, such as cancelling a subscription or recording a payment, run as one transaction.</li>
+</ul>
+
+<h2>Review 3 requirements and where to see them</h2>
+<table>
+  <tr><th>Requirement</th><th>Where to see it</th></tr>
+  {% for req, where, endpoint in requirements %}<tr><td>{{ req }}</td><td><a href="{{ url_for(endpoint) }}">{{ where }}</a></td></tr>{% endfor %}
+</table>
+
+<h2>Project facts</h2>
+<dl class="facts">
+  <dt>Database</dt><dd>MySQL 8.0, database saas_billing_db</dd>
+  <dt>Structure</dt><dd>10 tables, 9 foreign keys, 3 views</dd>
+  <dt>Application</dt><dd>Python 3 with Flask</dd>
+  <dt>Automated tests</dt><dd>57 test cases for the application, all passed in the last recorded run</dd>
+  <dt>Data</dt><dd>Fictional sample data created for the project</dd>
+</dl>
+{% endblock %}

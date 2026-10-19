@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}Ticket{% endblock %}
+{% block content %}
+<h1>{{ 'New support ticket' if mode == 'new' else 'Edit ticket #%d' % ticket_id }}</h1>
+<div class="card"><form method="post" novalidate><div class="form-grid">
+  <div><label>Client *</label><select name="client" required><option value="">-- select --</option>{% for c in clients %}<option value="{{ c.Client_ID }}" {{ 'selected' if form.get('client')|string == c.Client_ID|string }}>{{ c.Company_Name }}</option>{% endfor %}</select></div>
+  <div><label>Issue type *</label><select name="issue">{% for i in issues %}<option {{ 'selected' if form.get('issue') == i }}>{{ i }}</option>{% endfor %}</select></div>
+  <div><label>Priority *</label><select name="priority">{% for i in priorities %}<option {{ 'selected' if form.get('priority') == i }}>{{ i }}</option>{% endfor %}</select></div>
+  <div><label>Status *</label><select name="status">{% for i in statuses %}<option {{ 'selected' if form.get('status') == i }}>{{ i }}</option>{% endfor %}</select></div>
+  <div><label>Created date *</label><input type="date" name="created" max="{{ today }}" value="{{ form.get('created','') }}" required></div>
+</div>
+<p class="muted">Setting the status to Resolved fills in the resolved date automatically.</p>
+<p><button class="btn" type="submit">Save ticket</button> <a class="btn grey" href="{{ url_for('tickets') }}">Cancel</a></p></form></div>
+{% endblock %}

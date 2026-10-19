@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block title %}Add usage{% endblock %}
+{% block content %}
+<h1>Add usage reading</h1>
+<div class="card"><form method="post" novalidate><div class="form-grid">
+  <div class="full"><label>Subscription *</label><select name="subscription" required><option value="">-- select --</option>{% for s in subs %}<option value="{{ s.Subscription_ID }}" {{ 'selected' if form.get('subscription')|string == s.Subscription_ID|string }}>#{{ s.Subscription_ID }} - {{ s.Company_Name }} ({{ s.Tier_Name }})</option>{% endfor %}</select></div>
+  <div><label>Active users *</label><input type="number" name="users" min="0" value="{{ form.get('users','') }}" required></div>
+  <div><label>Storage used (GB) *</label><input type="number" name="storage" min="0" step="0.01" value="{{ form.get('storage','') }}" required></div>
+  <div><label>Date *</label><input type="date" name="date" value="{{ form.get('date','') }}" required></div>
+</div>
+<p><button class="btn" type="submit">Save reading</button> <a class="btn grey" href="{{ url_for('usage') }}">Cancel</a></p></form></div>
+{% endblock %}

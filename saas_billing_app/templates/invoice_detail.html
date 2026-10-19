@@ -1,0 +1,35 @@
+{% extends "base.html" %}{% block title %}Invoice {{ inv.Invoice_ID }}{% endblock %}
+{% block content %}
+<h1>Invoice #{{ inv.Invoice_ID }} <span class="badge {{ inv.Invoice_Status|badge }}">{{ inv.Invoice_Status }}</span></h1>
+<div class="card">
+  <p><b>Client:</b> <a href="{{ url_for('client_detail', cid=inv.Client_ID) }}">{{ inv.Company_Name }}</a> &nbsp; <b>Plan:</b> {{ inv.Tier_Name }} &nbsp; <b>Subscription:</b> #{{ inv.Subscription_ID }}</p>
+  <p><b>Invoice date:</b> {{ inv.Invoice_Date }} &nbsp; <b>Due date:</b> {{ inv.Due_Date }}</p>
+  <p><b>Total:</b> {{ inv.Total_Amount|money }} &nbsp; <b>Paid:</b> {{ inv.Paid|money }} &nbsp; <b>Balance due:</b> <b>{{ inv.Balance|money }}</b></p>
+</div>
+<h2>Invoice lines</h2>
+<table><tr><th>Description</th><th class="num">Qty</th><th class="num">Unit price</th><th class="num">Amount</th></tr>
+{% for it in items %}<tr><td>{{ it.Description }}</td><td class="num">{{ it.Quantity }}</td><td class="num">{{ it.Unit_Price|money }}</td><td class="num">{{ it.Amount|money }}</td></tr>{% endfor %}
+<tr><td colspan="3" class="num"><b>Total</b></td><td class="num"><b>{{ inv.Total_Amount|money }}</b></td></tr></table>
+<h2>Payments</h2>
+<table><tr><th>No.</th><th>Date</th><th>Method</th><th class="num">Amount</th><th>Status</th><th class="num">Refunded</th><th>Refund</th></tr>
+{% for p in payments %}<tr><td>{{ p.Payment_ID }}</td><td>{{ p.Payment_Date }}</td><td>{{ p.Payment_Method }}</td><td class="num">{{ p.Amount_Paid|money }}</td><td><span class="badge {{ p.Status|badge }}">{{ p.Status }}</span></td><td class="num">{{ p.Refunded|money }}</td>
+<td>{% if p.Status == 'Success' and p.Refunded < p.Amount_Paid %}
+<form method="post" action="{{ url_for('payment_refund', pid=p.Payment_ID) }}" style="display:flex;gap:4px;flex-wrap:wrap">
+<input type="date" name="date" value="{{ today }}" style="width:135px"><input type="number" name="amount" step="0.01" min="0.01" placeholder="Amount" style="width:95px"><input type="text" name="reason" placeholder="Reason" style="width:130px">
+<select name="status" style="width:122px">{% for s in refund_statuses %}<option>{{ s }}</option>{% endfor %}</select><button class="btn small" type="submit">Refund</button></form>{% endif %}</td></tr>
+{% else %}<tr><td colspan="7">No payments yet.</td></tr>{% endfor %}</table>
+{% if refunds %}<h2>Refunds</h2>
+<table><tr><th>No.</th><th>Payment</th><th>Date</th><th class="num">Amount</th><th>Reason</th><th>Status</th></tr>
+{% for r in refunds %}<tr><td>{{ r.Refund_ID }}</td><td>{{ r.Payment_ID }}</td><td>{{ r.Refund_Date }}</td><td class="num">{{ r.Refund_Amount|money }}</td><td>{{ r.Reason or '-' }}</td><td><span class="badge {{ r.Refund_Status|badge }}">{{ r.Refund_Status }}</span></td></tr>{% endfor %}</table>{% endif %}
+{% if inv.Balance > 0 %}
+<h2>Record a payment</h2>
+<div class="card"><form method="post" action="{{ url_for('invoice_pay', iid=inv.Invoice_ID) }}" class="inline-form" novalidate>
+  <div><label>Date *</label><input type="date" name="date" value="{{ today }}" required></div>
+  <div><label>Method *</label><select name="method">{% for m in methods %}<option>{{ m }}</option>{% endfor %}</select></div>
+  <div><label>Amount (Rs.) *</label><input type="number" name="amount" step="0.01" min="0.01" value="{{ '%.2f' % inv.Balance }}" required></div>
+  <div><label>Status *</label><select name="status">{% for s in pay_statuses %}<option>{{ s }}</option>{% endfor %}</select></div>
+  <div></div><div><button class="btn" type="submit">Save payment</button></div>
+</form></div>{% endif %}
+<p class="actions"><a class="btn grey" href="{{ url_for('invoices') }}">Back to invoices</a>
+{% if not payments %}<form method="post" action="{{ url_for('invoice_delete', iid=inv.Invoice_ID) }}" onsubmit="return confirm('Delete this invoice and its lines?');"><button class="btn red" type="submit">Delete invoice</button></form>{% endif %}</p>
+{% endblock %}

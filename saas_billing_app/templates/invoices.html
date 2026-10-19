@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% block title %}Invoices{% endblock %}
+{% block content %}
+<h1>Invoices</h1>
+<form class="toolbar" method="get">
+  <div class="grow"><label>Client name</label><input type="text" name="q" value="{{ q }}"></div>
+  <div><label>Status</label><select name="status"><option value="">All</option>{% for s in statuses %}<option {{ 'selected' if s == status }}>{{ s }}</option>{% endfor %}</select></div>
+  <div><label>Invoice date from</label><input type="date" name="from" value="{{ date_from }}"></div>
+  <div><label>to</label><input type="date" name="to" value="{{ date_to }}"></div>
+  <div><button class="btn" type="submit">Filter</button> <a class="btn grey" href="{{ url_for('invoices') }}">Clear</a></div>
+</form>
+<p class="actions"><a class="btn" href="{{ url_for('invoice_new') }}">+ New invoice</a>
+<form method="post" action="{{ url_for('invoices_mark_overdue') }}"><button class="btn grey" type="submit">Mark overdue invoices</button></form></p>
+<table><tr><th>No.</th><th>Client</th><th>Plan</th><th>Date</th><th>Due</th><th class="num">Total</th><th class="num">Paid</th><th>Status</th></tr>
+{% for r in rows %}<tr><td><a href="{{ url_for('invoice_detail', iid=r.Invoice_ID) }}">#{{ r.Invoice_ID }}</a></td><td>{{ r.Company_Name }}</td><td>{{ r.Tier_Name }}</td><td>{{ r.Invoice_Date }}</td><td>{{ r.Due_Date }}</td><td class="num">{{ r.Total_Amount|money }}</td><td class="num">{{ r.Paid|money }}</td><td><span class="badge {{ r.Invoice_Status|badge }}">{{ r.Invoice_Status }}</span></td></tr>
+{% else %}<tr><td colspan="8">No invoices found.</td></tr>{% endfor %}</table>
+<p class="muted">{{ rows|length }} invoice(s) shown.</p>
+{% endblock %}

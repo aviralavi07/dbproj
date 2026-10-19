@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}Reports{% endblock %}
+{% block content %}
+<h1>Reports (important SQL queries)</h1>
+<p class="muted">Each report below runs the SQL shown, directly on the database, when this page is opened.</p>
+{% for r in results %}
+<div class="card">
+  <h2 style="margin-top:0">{{ loop.index }}. {{ r.title }}</h2><div class="concept">{{ r.concept }}</div>
+  <pre class="sql">{{ r.sql }}</pre>
+  <table><tr>{% for c in r.cols %}<th>{{ c }}</th>{% endfor %}</tr>
+  {% for row in r.rows %}<tr>{% for c in r.cols %}<td>{{ row[c]|cell(c) }}</td>{% endfor %}</tr>{% else %}<tr><td>No rows.</td></tr>{% endfor %}</table>
+</div>
+{% endfor %}
+{% endblock %}

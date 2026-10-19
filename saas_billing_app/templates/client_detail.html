@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% block title %}{{ c.Company_Name }}{% endblock %}
+{% block content %}
+<h1>{{ c.Company_Name }}</h1>
+<div class="card">
+  <p><b>Contact:</b> {{ c.Contact_Person }} &nbsp; <b>E-mail:</b> {{ c.Email }} &nbsp; <b>Phone:</b> {{ c.Phone or '-' }}</p>
+  <p><b>Signed up:</b> {{ c.Signup_Date }} &nbsp; <b>Auto-renew:</b> {{ 'Yes' if c.Auto_Renew else 'No' }}</p>
+  <div class="actions"><a class="btn" href="{{ url_for('client_edit', cid=c.Client_ID) }}">Edit</a>
+  <form method="post" action="{{ url_for('client_delete', cid=c.Client_ID) }}" onsubmit="return confirm('Delete this client?');"><button class="btn red" type="submit">Delete</button></form>
+  <a class="btn grey" href="{{ url_for('clients') }}">Back</a></div>
+</div>
+<h2>Subscriptions</h2>
+<table><tr><th>ID</th><th>Plan</th><th>Start</th><th>End</th><th>Status</th></tr>
+{% for s in subs %}<tr><td>{{ s.Subscription_ID }}</td><td>{{ s.Tier_Name }}</td><td>{{ s.Start_Date }}</td><td>{{ s.End_Date or '-' }}</td><td><span class="badge {{ s.Status|badge }}">{{ s.Status }}</span></td></tr>{% else %}<tr><td colspan="5">No subscriptions.</td></tr>{% endfor %}</table>
+<h2>Support tickets</h2>
+<table><tr><th>ID</th><th>Issue</th><th>Priority</th><th>Status</th><th>Created</th></tr>
+{% for t in tickets %}<tr><td>{{ t.Ticket_ID }}</td><td>{{ t.Issue_Type }}</td><td>{{ t.Priority }}</td><td><span class="badge {{ t.Ticket_Status|badge }}">{{ t.Ticket_Status }}</span></td><td>{{ t.Created_Date }}</td></tr>{% else %}<tr><td colspan="5">No tickets.</td></tr>{% endfor %}</table>
+{% endblock %}

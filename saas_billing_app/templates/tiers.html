@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block title %}Plans{% endblock %}
+{% block content %}
+<h1>Pricing plans</h1>
+<p><a class="btn" href="{{ url_for('tier_new') }}">+ Add plan</a></p>
+<table><tr><th>ID</th><th>Plan</th><th class="num">Monthly rate</th><th class="num">Max users</th><th class="num">Storage (GB)</th><th class="num">Subscriptions</th><th></th></tr>
+{% for r in rows %}<tr><td>{{ r.Tier_ID }}</td><td>{{ r.Tier_Name }}</td><td class="num">{{ r.Monthly_Rate|money }}</td><td class="num">{{ r.Max_Users }}</td><td class="num">{{ r.Storage_GB }}</td><td class="num">{{ r.Subs }}</td>
+<td class="actions"><a class="btn small" href="{{ url_for('tier_edit', tid=r.Tier_ID) }}">Edit</a>
+<form method="post" action="{{ url_for('tier_delete', tid=r.Tier_ID) }}" onsubmit="return confirm('Delete this plan?');"><button class="btn small red" type="submit">Delete</button></form></td></tr>{% endfor %}</table>
+{% endblock %}

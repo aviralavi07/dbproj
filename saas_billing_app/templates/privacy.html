@@ -1,0 +1,38 @@
+{% extends "base.html" %}{% block title %}Privacy Policy{% endblock %}
+{% block content %}
+<div class="doc">
+<h1>Privacy Policy</h1>
+<p class="muted">Last updated: October 2026</p>
+
+<h2>1. About this website</h2>
+<p>This website and application is a course project for Database Systems, made by Aviral Srivastava, Somil Krishnani and Parth Sikka. It runs on the computer of the person who starts it, at the address 127.0.0.1 (localhost). It is not a public service and it has no accounts.</p>
+
+<h2>2. What data the application handles</h2>
+<p>The application stores and displays business records that are typed into it or loaded from the sample database script: client company names, contact person names, e-mail addresses and phone numbers, subscriptions, invoices, payments, refunds, support tickets and usage readings. The sample records supplied with the project are fictional.</p>
+
+<h2>3. Where the data is stored</h2>
+<p>All data is stored in the MySQL database on the same computer that runs the application. The application does not send data to any other server. It does not use analytics, advertising, tracking scripts, external fonts or any other third-party service, and every page, image and style sheet is loaded from the local application.</p>
+
+<h2>4. Cookies</h2>
+<p>The application sets one cookie, named session, when you submit a form. It carries the one-time confirmation or error message that is shown on the next page, and it is signed so that it cannot be changed. It is deleted when you close the browser. There are no tracking or advertising cookies.</p>
+
+<h2>5. Server log</h2>
+<p>The local server prints each page request (time, address and page requested) in the terminal window where it is running. This log is not saved or sent anywhere unless the person running the project copies it.</p>
+
+<h2>6. Your choices</h2>
+<ul class="plain">
+  <li>Records can be changed or deleted from the application pages, as long as other records do not depend on them.</li>
+  <li>All data can be reset to the sample data by running database/final_database.sql again.</li>
+  <li>All data can be removed completely by dropping the database saas_billing_db in MySQL.</li>
+</ul>
+
+<h2>7. Security</h2>
+<p>The application has no login. Anyone who can open its address can see and change all of its data. It is therefore set to accept connections from the same computer only. Please do not enter real personal, financial or payment information, and do not make the application reachable from a network or the internet without first adding a login and a secure connection.</p>
+
+<h2>8. Changes to this policy</h2>
+<p>If the application starts to handle data in a different way, this page will be updated and the date above will change.</p>
+
+<h2>9. Contact</h2>
+<p>Questions about this project can be sent to the team members listed on the <a href="{{ url_for('team') }}">Team page</a>.</p>
+</div>
+{% endblock %}

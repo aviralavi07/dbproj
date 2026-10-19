@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Dashboard</h1>
+<div class="kpis">
+  <div class="kpi"><div class="n">{{ kpi.clients }}</div><div class="l">Clients</div></div>
+  <div class="kpi"><div class="n">{{ kpi.active }}</div><div class="l">Active subscriptions</div></div>
+  <div class="kpi"><div class="n">{{ kpi.billed|money }}</div><div class="l">Total billed</div></div>
+  <div class="kpi"><div class="n">{{ kpi.received|money }}</div><div class="l">Payments received</div></div>
+  <div class="kpi"><div class="n">{{ kpi.overdue }}</div><div class="l">Overdue invoices</div></div>
+  <div class="kpi"><div class="n">{{ kpi.tickets }}</div><div class="l">Unresolved tickets</div></div>
+</div>
+<div class="cols">
+  <div><h2>Revenue by pricing tier</h2>
+    <table><tr><th>Plan</th><th class="num">Subscriptions</th><th class="num">Revenue</th></tr>
+    {% for r in tiers %}<tr><td>{{ r.Tier_Name }}</td><td class="num">{{ r.Subscriptions }}</td><td class="num">{{ r.Revenue|money }}</td></tr>{% endfor %}</table>
+  </div>
+  <div><h2>Latest invoices</h2>
+    <table><tr><th>No.</th><th>Client</th><th>Date</th><th class="num">Total</th><th>Status</th></tr>
+    {% for r in recent %}<tr><td><a href="{{ url_for('invoice_detail', iid=r.Invoice_ID) }}">#{{ r.Invoice_ID }}</a></td><td>{{ r.Company_Name }}</td><td>{{ r.Invoice_Date }}</td><td class="num">{{ r.Total_Amount|money }}</td><td><span class="badge {{ r.Invoice_Status|badge }}">{{ r.Invoice_Status }}</span></td></tr>{% endfor %}</table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block title %}{{ 'Add client' if mode == 'new' else 'Edit client' }}{% endblock %}
+{% block content %}
+<h1>{{ 'Add client' if mode == 'new' else 'Edit client #%d' % client_id }}</h1>
+<div class="card"><form method="post" novalidate>
+  <div class="form-grid">
+    <div><label>Company name *</label><input type="text" name="company" maxlength="100" value="{{ form.get('company','') }}" required></div>
+    <div><label>Contact person *</label><input type="text" name="contact" maxlength="80" value="{{ form.get('contact','') }}" required></div>
+    <div><label>E-mail *</label><input type="email" name="email" maxlength="100" value="{{ form.get('email','') }}" required></div>
+    <div><label>Phone (10-15 digits)</label><input type="text" name="phone" maxlength="16" value="{{ form.get('phone','') }}"></div>
+    <div><label>Signup date *</label><input type="date" name="signup" max="{{ today }}" value="{{ form.get('signup','') }}" required></div>
+    <div><label>&nbsp;</label><label><input type="checkbox" name="auto_renew" value="1" {{ 'checked' if form.get('auto_renew') }}> Auto-renew subscriptions</label></div>
+  </div>
+  <p><button class="btn" type="submit">{{ 'Save client' if mode == 'new' else 'Update client' }}</button>
+  <a class="btn grey" href="{{ url_for('clients') }}">Cancel</a></p>
+</form></div>
+{% endblock %}

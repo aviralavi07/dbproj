@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% block title %}Support{% endblock %}
+{% block content %}
+<h1>Support tickets</h1>
+<form class="toolbar" method="get">
+  <div class="grow"><label>Client name</label><input type="text" name="q" value="{{ q }}"></div>
+  <div><label>Status</label><select name="status"><option value="">All</option>{% for s in statuses %}<option {{ 'selected' if s == status }}>{{ s }}</option>{% endfor %}</select></div>
+  <div><label>Priority</label><select name="priority"><option value="">All</option>{% for s in priorities %}<option {{ 'selected' if s == priority }}>{{ s }}</option>{% endfor %}</select></div>
+  <div><button class="btn" type="submit">Filter</button> <a class="btn grey" href="{{ url_for('tickets') }}">Clear</a></div>
+  <div><a class="btn" href="{{ url_for('ticket_new') }}">+ New ticket</a></div>
+</form>
+<table><tr><th>ID</th><th>Client</th><th>Issue</th><th>Priority</th><th>Status</th><th>Created</th><th>Resolved</th><th></th></tr>
+{% for r in rows %}<tr><td>{{ r.Ticket_ID }}</td><td>{{ r.Company_Name }}</td><td>{{ r.Issue_Type }}</td><td><span class="badge {{ r.Priority|badge }}">{{ r.Priority }}</span></td><td><span class="badge {{ r.Ticket_Status|badge }}">{{ r.Ticket_Status }}</span></td><td>{{ r.Created_Date }}</td><td>{{ r.Resolved_Date or '-' }}</td>
+<td class="actions"><a class="btn small" href="{{ url_for('ticket_edit', tid=r.Ticket_ID) }}">Edit</a>
+<form method="post" action="{{ url_for('ticket_delete', tid=r.Ticket_ID) }}" onsubmit="return confirm('Delete this ticket?');"><button class="btn small red" type="submit">Delete</button></form></td></tr>
+{% else %}<tr><td colspan="8">No tickets found.</td></tr>{% endfor %}</table>
+<p class="muted">{{ rows|length }} ticket(s) shown.</p>
+{% endblock %}

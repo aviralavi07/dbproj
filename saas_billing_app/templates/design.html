@@ -1,0 +1,43 @@
+{% extends "base.html" %}{% block title %}Database design{% endblock %}
+{% block content %}
+<h1>Database design</h1>
+<p class="lead">The database has ten tables. Each table comes from one entity of the ER diagram, and each foreign key comes from one relationship.</p>
+
+<h2>ER diagram</h2>
+<figure>
+  <img src="{{ url_for('static', filename='er_diagram.png') }}" alt="ER diagram with ten entities: client, pricing tier, subscription, cancellation, support ticket, invoice, invoice item, payment, refund and usage record, joined by nine relationships.">
+  <figcaption>1 means one, N means many. A double line means every record on that side must take part in the relationship.</figcaption>
+</figure>
+
+<h2>Tables and attributes</h2>
+<table>
+  <tr><th>Table</th><th>Primary key</th><th>Other columns</th></tr>
+  {% for name, pk, cols in entities %}<tr><td><b>{{ name }}</b></td><td>{{ pk }}</td><td>{{ cols }}</td></tr>{% endfor %}
+</table>
+
+<h2>Relationships</h2>
+<table>
+  <tr><th>Relationship</th><th>Tables</th><th>Cardinality</th><th>Foreign key</th></tr>
+  {% for name, tables, card, fk in relationships %}<tr><td>{{ name }}</td><td>{{ tables }}</td><td>{{ card }}</td><td>{{ fk }}</td></tr>{% endfor %}
+</table>
+<p class="muted" style="margin-top:8px">Clients and plans are linked many to many through SUBSCRIPTION, which holds a foreign key to each.</p>
+
+<h2>Rules enforced by the database</h2>
+<ul class="plain">
+  <li>Every table has a primary key.</li>
+  <li>Nine foreign keys stop a record from pointing to a parent that does not exist. A parent row cannot be deleted while child rows exist, except that the lines of an invoice are deleted with the invoice.</li>
+  <li>Client e-mail, plan name and the subscription in a cancellation must be unique.</li>
+  <li>Amounts, quantities and limits must be positive, status columns accept fixed values only, and dates must be in a sensible order, for example End_Date cannot be before Start_Date.</li>
+</ul>
+
+<h2>Normalization</h2>
+<p>The tables are in third normal form. Plan details are stored only in PRICING_TIER, client details only in CLIENT, and the lines of an invoice are stored in INVOICE_ITEM instead of being repeated inside INVOICE. Total_Amount and Amount are stored on purpose, so that an old invoice never changes when a plan price changes. Two audit queries check that they always match the lines.</p>
+
+<h2>Views</h2>
+<p>The application reads <b>vw_tier_revenue</b> on the dashboard and <b>vw_invoice_balance</b> on the Reports page.</p>
+<pre class="code">{{ views }}</pre>
+
+<h2>Create the database</h2>
+<pre class="code">mysql -u root -p &lt; database/final_database.sql</pre>
+<p>The script creates the database, the tables, the sample data and the views. Running it again resets the data.</p>
+{% endblock %}

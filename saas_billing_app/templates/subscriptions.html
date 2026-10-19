@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block title %}Subscriptions{% endblock %}
+{% block content %}
+<h1>Subscriptions</h1>
+<form class="toolbar" method="get">
+  <div class="grow"><label>Client name</label><input type="text" name="q" value="{{ q }}"></div>
+  <div><label>Status</label><select name="status"><option value="">All</option>{% for s in statuses %}<option {{ 'selected' if s == status }}>{{ s }}</option>{% endfor %}</select></div>
+  <div><button class="btn" type="submit">Filter</button> <a class="btn grey" href="{{ url_for('subscriptions') }}">Clear</a></div>
+  <div><a class="btn" href="{{ url_for('subscription_new') }}">+ New subscription</a></div>
+</form>
+<table><tr><th>ID</th><th>Client</th><th>Plan</th><th class="num">Rate</th><th>Start</th><th>End</th><th>Status</th><th></th></tr>
+{% for r in rows %}<tr><td>{{ r.Subscription_ID }}</td><td>{{ r.Company_Name }}</td><td>{{ r.Tier_Name }}</td><td class="num">{{ r.Monthly_Rate|money }}</td><td>{{ r.Start_Date }}</td><td>{{ r.End_Date or '-' }}</td>
+<td><span class="badge {{ r.Status|badge }}">{{ r.Status }}</span></td>
+<td>{% if r.Status == 'Active' %}<a class="btn small red" href="{{ url_for('subscription_cancel', sid=r.Subscription_ID) }}">Cancel</a>{% endif %}</td></tr>
+{% else %}<tr><td colspan="8">No subscriptions found.</td></tr>{% endfor %}</table>
+<p class="muted">{{ rows|length }} subscription(s) shown.</p>
+{% endblock %}

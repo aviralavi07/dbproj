@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% block title %}Clients{% endblock %}
+{% block content %}
+<h1>Clients</h1>
+<form class="toolbar" method="get">
+  <div class="grow"><label>Search (company, contact or e-mail)</label><input type="text" name="q" value="{{ q }}" placeholder="e.g. nexora"></div>
+  <div><label>Auto-renew</label><select name="renew"><option value="">All</option><option value="1" {{ 'selected' if renew == '1' }}>On</option><option value="0" {{ 'selected' if renew == '0' }}>Off</option></select></div>
+  <div><button class="btn" type="submit">Search</button> <a class="btn grey" href="{{ url_for('clients') }}">Clear</a></div>
+  <div><a class="btn" href="{{ url_for('client_new') }}">+ Add client</a></div>
+</form>
+<table>
+  <tr><th>ID</th><th>Company</th><th>Contact</th><th>E-mail</th><th>Phone</th><th>Signed up</th><th>Auto-renew</th><th class="num">Subs</th><th></th></tr>
+  {% for r in rows %}<tr>
+    <td>{{ r.Client_ID }}</td><td><a href="{{ url_for('client_detail', cid=r.Client_ID) }}">{{ r.Company_Name }}</a></td>
+    <td>{{ r.Contact_Person }}</td><td>{{ r.Email }}</td><td>{{ r.Phone or '-' }}</td><td>{{ r.Signup_Date }}</td>
+    <td>{{ 'Yes' if r.Auto_Renew else 'No' }}</td><td class="num">{{ r.Subs }}</td>
+    <td class="actions"><a class="btn small" href="{{ url_for('client_edit', cid=r.Client_ID) }}">Edit</a></td>
+  </tr>{% else %}<tr><td colspan="9">No clients found.</td></tr>{% endfor %}
+</table>
+<p class="muted">{{ rows|length }} client(s) shown.</p>
+{% endblock %}

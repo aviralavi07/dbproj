@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block title %}New subscription{% endblock %}
+{% block content %}
+<h1>New subscription</h1>
+<div class="card"><form method="post" novalidate><div class="form-grid">
+  <div><label>Client *</label><select name="client" required><option value="">-- select --</option>{% for c in clients %}<option value="{{ c.Client_ID }}" {{ 'selected' if form.get('client')|string == c.Client_ID|string }}>{{ c.Company_Name }}</option>{% endfor %}</select></div>
+  <div><label>Pricing plan *</label><select name="tier" required><option value="">-- select --</option>{% for t in tiers %}<option value="{{ t.Tier_ID }}" {{ 'selected' if form.get('tier')|string == t.Tier_ID|string }}>{{ t.Tier_Name }} ({{ t.Monthly_Rate|money }}/month)</option>{% endfor %}</select></div>
+  <div><label>Start date *</label><input type="date" name="start" value="{{ form.get('start','') }}" required></div>
+  <div><label>End date (optional)</label><input type="date" name="end" value="{{ form.get('end','') }}"></div>
+</div>
+<p><button class="btn" type="submit">Create subscription</button> <a class="btn grey" href="{{ url_for('subscriptions') }}">Cancel</a></p></form></div>
+{% endblock %}
